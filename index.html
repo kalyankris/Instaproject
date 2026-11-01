@@ -4,74 +4,66 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>InstaSave — Download Instagram Videos & Reels Instantly</title>
-  <meta name="description" content="Download Instagram videos, Reels and public content instantly. Fast, free, no registration required. High quality downloads." />
-  <meta name="keywords" content="instagram downloader, download instagram reels, save instagram video, instagram video download" />
-  <meta name="author" content="InstaSave" />
-  <meta name="robots" content="index, follow" />
-
-  <!-- Open Graph -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="InstaSave — Download Instagram Videos Instantly" />
-  <meta property="og:description" content="Save your favourite Instagram videos, reels and public content in just a few clicks. Fast, simple and hassle-free." />
-  <meta property="og:url" content="https://instasave.app" />
-  <meta property="og:image" content="https://instasave.app/og-image.png" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="InstaSave — Download Instagram Videos Instantly" />
-  <meta name="twitter:description" content="Save your favourite Instagram videos, reels and public content in just a few clicks." />
-
-  <!-- Fonts -->
+  <title>InstaSave — Download Instagram Videos & Reels</title>
+  <meta name="description" content="Download Instagram videos and Reels instantly. Fast, simple, no registration." />
+  <meta name="theme-color" content="#000000" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📥</text></svg>" />
-
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>▶</text></svg>" />
   <style>
-    /* ============================================
-       InstaSave — Premium Design System
-       ============================================ */
-
-    :root {
-      --bg: #ffffff;
-      --bg-alt: #f8f9fc;
+    :root,
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #f5f5f7;
+      --bg-elevated: rgba(255, 255, 255, 0.78);
       --bg-card: #ffffff;
-      --text: #0f172a;
-      --text-secondary: #64748b;
-      --text-muted: #94a3b8;
-      --border: #e2e8f0;
-      --border-light: #f1f5f9;
-
-      --gradient: linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #3b82f6 100%);
-      --gradient-hover: linear-gradient(135deg, #6d28d9 0%, #4f46e5 50%, #2563eb 100%);
-      --gradient-soft: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(99, 102, 241, 0.08) 50%, rgba(59, 130, 246, 0.08) 100%);
-
-      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-      --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-      --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.04);
-      --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.15);
-
-      --radius-sm: 8px;
-      --radius: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 24px;
-      --radius-full: 9999px;
-
-      --container: 1120px;
-      --header-h: 72px;
-
-      --ease: cubic-bezier(0.4, 0, 0.2, 1);
-      --transition: 0.2s var(--ease);
+      --bg-soft: #e8e8ed;
+      --text: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --text-tertiary: #86868b;
+      --border: rgba(0, 0, 0, 0.08);
+      --border-strong: rgba(0, 0, 0, 0.12);
+      --accent: #0071e3;
+      --accent-hover: #0077ed;
+      --accent-soft: rgba(0, 113, 227, 0.12);
+      --success: #248a3d;
+      --success-bg: rgba(36, 138, 61, 0.12);
+      --error: #d70015;
+      --error-bg: rgba(215, 0, 21, 0.1);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --radius-full: 980px;
+      --nav-h: 52px;
+      --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+      --font: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
     }
 
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg: #000000;
+      --bg-elevated: rgba(28, 28, 30, 0.78);
+      --bg-card: #1c1c1e;
+      --bg-soft: #2c2c2e;
+      --text: #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --text-tertiary: #6e6e73;
+      --border: rgba(255, 255, 255, 0.1);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --accent: #0a84ff;
+      --accent-hover: #409cff;
+      --accent-soft: rgba(10, 132, 255, 0.2);
+      --success: #30d158;
+      --success-bg: rgba(48, 209, 88, 0.15);
+      --error: #ff453a;
+      --error-bg: rgba(255, 69, 58, 0.15);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.55);
     }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html {
       scroll-behavior: smooth;
@@ -80,143 +72,177 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
+      font-family: var(--font);
+      font-size: 17px;
+      line-height: 1.47;
       color: var(--text);
       background: var(--bg);
       overflow-x: hidden;
+      transition: background 0.35s var(--ease), color 0.35s var(--ease);
     }
 
-    img { max-width: 100%; display: block; }
+    /* Smooth theme transition for main surfaces */
+    .nav,
+    .downloader,
+    .feature,
+    .faq-item,
+    .footer,
+    .mobile-nav,
+    .url-input,
+    .paste-btn,
+    .theme-btn,
+    .step-num,
+    .section-alt {
+      transition: background 0.35s var(--ease), border-color 0.35s var(--ease), color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    }
+
     a { color: inherit; text-decoration: none; }
-    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
     ul { list-style: none; }
+    img { max-width: 100%; display: block; }
 
     .container {
       width: 100%;
-      max-width: var(--container);
+      max-width: 980px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 22px;
     }
 
-    /* ========== Header ========== */
-    .header {
+    /* NAV - transparent, hide on scroll */
+    .nav {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: var(--header-h);
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--border-light);
+      height: var(--nav-h);
       z-index: 1000;
-      transition: box-shadow var(--transition);
+      display: flex;
+      align-items: center;
+      background: var(--bg-elevated);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: transform 0.4s var(--ease), background 0.35s var(--ease), border-color 0.35s var(--ease);
     }
 
-    .header.scrolled {
-      box-shadow: var(--shadow);
+    .nav.is-hidden {
+      transform: translateY(-100%);
     }
 
-    .nav {
+    .nav-inner {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 22px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 100%;
+      gap: 16px;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 1.25rem;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 1.05rem;
       letter-spacing: -0.02em;
     }
 
-    .logo-icon {
+    .logo-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #0071e3, #bf5af2);
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 36px;
-      height: 36px;
-      background: var(--gradient);
-      color: white;
-      border-radius: 10px;
-      font-size: 14px;
-    }
-
-    .logo-text {
-      background: var(--gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #fff;
+      font-size: 11px;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 28px;
     }
 
     .nav-links a {
-      font-size: 0.9375rem;
-      font-weight: 500;
+      font-size: 0.8125rem;
+      font-weight: 400;
       color: var(--text-secondary);
-      transition: color var(--transition);
-      position: relative;
+      transition: color 0.2s var(--ease);
     }
 
-    .nav-links a:hover {
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-soft);
       color: var(--text);
+      cursor: pointer;
+      position: relative;
+      z-index: 1002;
+      pointer-events: auto;
+      transition: background 0.2s var(--ease), transform 0.2s var(--ease);
     }
 
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--gradient);
-      border-radius: 1px;
-      transition: width var(--transition);
+    .theme-btn:hover {
+      background: var(--border-strong);
+      transform: scale(1.05);
     }
 
-    .nav-links a:hover::after {
-      width: 100%;
+    .theme-btn svg {
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
     }
+
+    .theme-btn .icon-sun { display: none; }
+    .theme-btn .icon-moon { display: block; }
+    html[data-theme="dark"] .theme-btn .icon-sun { display: block; }
+    html[data-theme="dark"] .theme-btn .icon-moon { display: none; }
 
     .nav-toggle {
       display: none;
       flex-direction: column;
+      justify-content: center;
       gap: 5px;
-      padding: 8px;
+      width: 40px;
+      height: 40px;
+      padding: 10px;
+      cursor: pointer;
+      position: relative;
+      z-index: 1002;
+      pointer-events: auto;
     }
 
     .nav-toggle span {
       display: block;
-      width: 22px;
+      width: 18px;
       height: 2px;
       background: var(--text);
       border-radius: 1px;
-      transition: var(--transition);
+      transition: 0.25s var(--ease);
     }
 
-    /* ========== Hero ========== */
+    /* HERO */
     .hero {
-      padding: calc(var(--header-h) + 80px) 0 100px;
-      background: 
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.12), transparent),
-        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(59, 130, 246, 0.06), transparent),
-        var(--bg);
-    }
-
-    .hero-content {
+      padding: calc(var(--nav-h) + 72px) 0 80px;
       text-align: center;
-      max-width: 720px;
-      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
     }
 
     .hero-badge {
@@ -224,1244 +250,972 @@
       align-items: center;
       gap: 6px;
       padding: 6px 14px;
-      background: var(--gradient-soft);
-      border: 1px solid rgba(124, 58, 237, 0.15);
       border-radius: var(--radius-full);
-      font-size: 0.8125rem;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.75rem;
       font-weight: 600;
-      color: #7c3aed;
-      margin-bottom: 24px;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
+      margin-bottom: 20px;
     }
 
-    .hero-title {
-      font-size: clamp(2.25rem, 5vw, 3.25rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.08;
+      margin-bottom: 14px;
       color: var(--text);
-      margin-bottom: 16px;
     }
 
-    .hero-subtitle {
-      font-size: 1.125rem;
+    .hero-sub {
+      font-size: 1.2rem;
       color: var(--text-secondary);
-      max-width: 540px;
-      margin: 0 auto 40px;
-      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto 36px;
+      line-height: 1.5;
+      font-weight: 400;
     }
 
-    /* ========== Downloader Card ========== */
-    .downloader-card {
+    /* DOWNLOADER */
+    .downloader {
+      max-width: 640px;
+      margin: 0 auto;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
+      border-radius: 24px;
       padding: 28px;
       box-shadow: var(--shadow-lg);
       text-align: left;
-      position: relative;
-      overflow: hidden;
+      transition: background 0.35s var(--ease), border-color 0.35s var(--ease);
     }
 
-    .downloader-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--gradient);
-    }
-
-    .input-group {
+    .input-row {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    .input-wrapper {
+    .input-wrap {
       flex: 1;
-      min-width: 240px;
+      min-width: 200px;
       position: relative;
-      display: flex;
-      align-items: center;
     }
 
-    .input-icon {
+    .input-wrap svg {
       position: absolute;
-      left: 16px;
-      color: var(--text-muted);
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-tertiary);
       pointer-events: none;
-      z-index: 1;
     }
 
     .url-input {
       width: 100%;
-      height: 56px;
-      padding: 0 100px 0 48px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      font-size: 0.9375rem;
-      color: var(--text);
+      height: 52px;
+      padding: 0 90px 0 42px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
       background: var(--bg);
-      transition: border-color var(--transition), box-shadow var(--transition);
+      color: var(--text);
+      font-size: 0.9375rem;
       outline: none;
+      transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
     }
 
-    .url-input::placeholder {
-      color: var(--text-muted);
-    }
+    .url-input::placeholder { color: var(--text-tertiary); }
 
     .url-input:focus {
-      border-color: #7c3aed;
-      box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
     }
 
     .paste-btn {
       position: absolute;
       right: 8px;
-      height: 40px;
-      padding: 0 16px;
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 0.875rem;
-      font-weight: 600;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 8px;
+      background: var(--bg-soft);
       color: var(--text-secondary);
-      transition: all var(--transition);
-      z-index: 1;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      transition: background 0.2s var(--ease), color 0.2s var(--ease);
     }
 
     .paste-btn:hover {
-      background: var(--border-light);
+      background: var(--border-strong);
       color: var(--text);
     }
 
-    .download-btn {
-      height: 56px;
-      padding: 0 32px;
-      background: var(--gradient);
-      color: white;
-      font-size: 1rem;
+    .dl-btn {
+      height: 52px;
+      padding: 0 28px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.9375rem;
       font-weight: 600;
-      border-radius: var(--radius);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform var(--transition), box-shadow var(--transition), opacity var(--transition);
-      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
-      min-width: 140px;
+      min-width: 130px;
+      transition: background 0.2s var(--ease), transform 0.15s var(--ease), opacity 0.2s;
+      box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3);
     }
 
-    .download-btn:hover:not(:disabled) {
-      background: var(--gradient-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
+    .dl-btn:hover:not(:disabled) {
+      background: var(--accent-hover);
+      transform: scale(1.02);
     }
 
-    .download-btn:active:not(:disabled) {
-      transform: translateY(0);
-    }
+    .dl-btn:active:not(:disabled) { transform: scale(0.98); }
+    .dl-btn:disabled { opacity: 0.65; cursor: not-allowed; }
 
-    .download-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-
-    .btn-loader {
-      display: none;
-      align-items: center;
-    }
-
-    .download-btn.is-loading .btn-text {
-      display: none;
-    }
-
-    .download-btn.is-loading .btn-loader {
-      display: flex;
-    }
+    .dl-btn .btn-loader { display: none; }
+    .dl-btn.is-loading .btn-text { display: none; }
+    .dl-btn.is-loading .btn-loader { display: flex; }
 
     .spinner {
-      width: 22px;
-      height: 22px;
-      animation: spin 0.8s linear infinite;
+      width: 20px;
+      height: 20px;
+      animation: spin 0.7s linear infinite;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Status Messages */
-    .status-message {
-      margin-top: 16px;
-      padding: 12px 16px;
-      border-radius: var(--radius-sm);
+    .status {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 10px;
       font-size: 0.875rem;
       font-weight: 500;
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      animation: fadeIn 0.25s var(--ease);
+      display: none;
     }
 
-    .status-message.error {
-      background: #fef2f2;
-      color: #b91c1c;
-      border: 1px solid #fecaca;
-    }
+    .status.show { display: block; animation: fadeUp 0.3s var(--ease); }
+    .status.error { background: var(--error-bg); color: var(--error); }
+    .status.success { background: var(--success-bg); color: var(--success); }
+    .status.info { background: var(--accent-soft); color: var(--accent); }
 
-    .status-message.success {
-      background: #f0fdf4;
-      color: #15803d;
-      border: 1px solid #bbf7d0;
-    }
-
-    .status-message.info {
-      background: #eff6ff;
-      color: #1d4ed8;
-      border: 1px solid #bfdbfe;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-6px); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Result Card */
-    .result-card {
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border-light);
-      animation: fadeIn 0.3s var(--ease);
+    .progress {
+      margin-top: 18px;
+      display: none;
     }
 
-    .result-preview {
+    .progress.show { display: block; animation: fadeUp 0.3s var(--ease); }
+
+    .progress-top {
       display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    .thumbnail-wrapper {
-      position: relative;
-      width: 160px;
-      flex-shrink: 0;
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: var(--bg-alt);
-      aspect-ratio: 9/16;
-      max-height: 220px;
-    }
-
-    .thumbnail-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .play-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0, 0, 0, 0.25);
-      opacity: 0.9;
-    }
-
-    .result-info {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .video-title {
-      font-size: 1.0625rem;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .video-meta {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-    }
-
-    .download-video-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 8px;
-      padding: 12px 24px;
-      background: var(--gradient);
-      color: white;
-      font-size: 0.9375rem;
-      font-weight: 600;
-      border-radius: var(--radius);
-      width: fit-content;
-      transition: transform var(--transition), box-shadow var(--transition);
-      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
-    }
-
-    .download-video-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.4);
-    }
-
-    /* ========== Sections ========== */
-    .section {
-      padding: 100px 0;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 56px;
-    }
-
-    .section-header h2 {
-      font-size: clamp(1.75rem, 3.5vw, 2.25rem);
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      margin-bottom: 12px;
-      color: var(--text);
-    }
-
-    .section-header p {
-      font-size: 1.0625rem;
+      justify-content: space-between;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      margin-bottom: 8px;
       color: var(--text-secondary);
-      max-width: 480px;
-      margin: 0 auto;
     }
 
-    /* Features */
-    .features {
-      background: var(--bg-alt);
+    .progress-top span:last-child {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .progress-track {
+      height: 6px;
+      background: var(--bg-soft);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent), #bf5af2);
+      transition: width 0.35s var(--ease);
+    }
+
+    /* SECTIONS */
+    .section { padding: 88px 0; }
+
+    .section-alt {
+      background: var(--bg-soft);
+      transition: background 0.35s var(--ease);
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .section-desc {
+      text-align: center;
+      color: var(--text-secondary);
+      max-width: 420px;
+      margin: 0 auto 48px;
+      font-size: 1.05rem;
     }
 
     .features-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      gap: 16px;
     }
 
-    .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 32px 28px;
-      transition: transform var(--transition), box-shadow var(--transition);
-    }
-
-    .feature-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .feature-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      color: white;
-    }
-
-    .gradient-1 { background: linear-gradient(135deg, #7c3aed, #a855f7); }
-    .gradient-2 { background: linear-gradient(135deg, #6366f1, #818cf8); }
-    .gradient-3 { background: linear-gradient(135deg, #3b82f6, #60a5fa); }
-
-    .feature-card h3 {
-      font-size: 1.125rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: -0.01em;
-    }
-
-    .feature-card p {
-      font-size: 0.9375rem;
-      color: var(--text-secondary);
-      line-height: 1.65;
-    }
-
-    /* How It Works */
-    .steps {
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 0;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .step {
-      flex: 1;
-      text-align: center;
-      padding: 0 20px;
-    }
-
-    .step-number {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 56px;
-      height: 56px;
-      background: var(--gradient);
-      color: white;
-      font-size: 1.125rem;
-      font-weight: 700;
-      border-radius: 16px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(124, 58, 237, 0.25);
-    }
-
-    .step h3 {
-      font-size: 1.0625rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      letter-spacing: -0.01em;
-    }
-
-    .step p {
-      font-size: 0.9375rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    .step-connector {
-      width: 60px;
-      height: 2px;
-      background: var(--border);
-      margin-top: 27px;
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .step-connector::after {
-      content: '';
-      position: absolute;
-      right: -4px;
-      top: -3px;
-      width: 8px;
-      height: 8px;
-      border-right: 2px solid var(--border);
-      border-top: 2px solid var(--border);
-      transform: rotate(45deg);
-    }
-
-    /* FAQ */
-    .faq {
-      background: var(--bg-alt);
-    }
-
-    .faq-list {
-      max-width: 720px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .faq-item {
+    .feature {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      overflow: hidden;
-      transition: box-shadow var(--transition);
+      padding: 28px 24px;
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
     }
 
-    .faq-item.active {
+    .feature:hover {
+      transform: translateY(-4px);
       box-shadow: var(--shadow);
     }
 
-    .faq-question {
-      width: 100%;
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 18px 22px;
+      justify-content: center;
+      margin-bottom: 16px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .feature h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .feature p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .step { text-align: center; padding: 8px; }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      border-radius: 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .step h3 {
       font-size: 1rem;
       font-weight: 600;
-      color: var(--text);
-      text-align: left;
-      transition: background var(--transition);
+      margin-bottom: 6px;
     }
 
-    .faq-question:hover {
-      background: var(--bg-alt);
-    }
-
-    .faq-chevron {
-      flex-shrink: 0;
-      color: var(--text-muted);
-      transition: transform 0.3s var(--ease);
-    }
-
-    .faq-item.active .faq-chevron {
-      transform: rotate(180deg);
-      color: #7c3aed;
-    }
-
-    .faq-answer {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.35s var(--ease);
-    }
-
-    .faq-item.active .faq-answer {
-      max-height: 200px;
-    }
-
-    .faq-answer p {
-      padding: 0 22px 20px;
-      font-size: 0.9375rem;
+    .step p {
+      font-size: 0.875rem;
       color: var(--text-secondary);
-      line-height: 1.7;
+      line-height: 1.5;
     }
 
-    /* About */
-    .about-content {
+    .faq-list {
       max-width: 640px;
       margin: 0 auto;
-      text-align: center;
-    }
-
-    .about-content p {
-      font-size: 1.0625rem;
-      color: var(--text-secondary);
-      line-height: 1.75;
-      margin-bottom: 16px;
-    }
-
-    /* ========== Footer ========== */
-    .footer {
-      background: #0f172a;
-      color: #94a3b8;
-      padding: 64px 0 32px;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 48px;
-      margin-bottom: 48px;
-    }
-
-    .footer .logo-text {
-      color: white;
-      -webkit-text-fill-color: white;
-    }
-
-    .footer .logo-icon {
-      background: var(--gradient);
-    }
-
-    .footer-tagline {
-      margin-top: 12px;
-      font-size: 0.9375rem;
-      color: #64748b;
-    }
-
-    .footer-links h4 {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: white;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-
-    .footer-links ul {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .footer-links a {
-      font-size: 0.9375rem;
-      color: #94a3b8;
-      transition: color var(--transition);
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: box-shadow 0.25s var(--ease);
     }
 
-    .footer-links a:hover {
-      color: white;
+    .faq-item.active { box-shadow: var(--shadow); }
+
+    .faq-q {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: left;
+      color: var(--text);
     }
 
-    .footer-bottom {
-      padding-top: 32px;
-      border-top: 1px solid #1e293b;
+    .faq-q svg {
+      flex-shrink: 0;
+      color: var(--text-tertiary);
+      transition: transform 0.3s var(--ease);
     }
 
-    .copyright {
+    .faq-item.active .faq-q svg {
+      transform: rotate(180deg);
+      color: var(--accent);
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s var(--ease);
+    }
+
+    .faq-item.active .faq-a { max-height: 160px; }
+
+    .faq-a p {
+      padding: 0 18px 16px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .footer {
+      padding: 48px 0 32px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-card);
+      transition: background 0.35s var(--ease);
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .footer-brand .logo { margin-bottom: 8px; }
+
+    .footer-brand p {
       font-size: 0.875rem;
+      color: var(--text-tertiary);
+    }
+
+    .footer-cols {
+      display: flex;
+      gap: 48px;
+    }
+
+    .footer-cols h4 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-tertiary);
       margin-bottom: 12px;
     }
 
-    .disclaimer {
-      font-size: 0.8125rem;
-      color: #64748b;
+    .footer-cols a {
+      display: block;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      transition: color 0.2s;
+    }
+
+    .footer-cols a:hover { color: var(--text); }
+
+    .footer-bottom {
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
       line-height: 1.6;
-      max-width: 720px;
+      max-width: 640px;
     }
 
-    /* ========== Responsive ========== */
-    @media (max-width: 900px) {
-      .features-grid {
-        grid-template-columns: 1fr;
-        max-width: 400px;
-        margin: 0 auto;
-      }
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 22px 20px;
+      z-index: 999;
+      transform: translateY(-120%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.35s var(--ease), opacity 0.35s var(--ease);
+    }
 
+    .mobile-nav.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-nav a {
+      display: block;
+      padding: 14px 0;
+      font-size: 1rem;
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    @media (max-width: 820px) {
+      .features-grid,
       .steps {
-        flex-direction: column;
-        align-items: center;
-        gap: 32px;
-      }
-
-      .step-connector {
-        width: 2px;
-        height: 40px;
-        margin: 0;
-      }
-
-      .step-connector::after {
-        bottom: -4px;
-        top: auto;
-        left: -3px;
-        right: auto;
-        transform: rotate(135deg);
-      }
-
-      .footer-grid {
         grid-template-columns: 1fr;
-        gap: 32px;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
       }
     }
 
-    @media (max-width: 768px) {
-      .nav-toggle {
-        display: flex;
-      }
+    @media (max-width: 720px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+      .mobile-nav { display: block; }
 
-      .nav-links {
-        position: fixed;
-        top: var(--header-h);
-        left: 0;
-        right: 0;
-        background: white;
-        flex-direction: column;
-        padding: 24px;
-        gap: 0;
-        border-bottom: 1px solid var(--border);
-        box-shadow: var(--shadow-md);
-        transform: translateY(-120%);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
-      }
+      .hero { padding: calc(var(--nav-h) + 48px) 0 56px; }
+      .hero-sub { font-size: 1.05rem; }
 
-      .nav-links.open {
-        transform: translateY(0);
-        opacity: 1;
-        pointer-events: auto;
-      }
+      .downloader { padding: 20px; border-radius: 20px; }
+      .input-row { flex-direction: column; }
+      .dl-btn { width: 100%; }
 
-      .nav-links li {
-        width: 100%;
-      }
-
-      .nav-links a {
-        display: block;
-        padding: 14px 0;
-        border-bottom: 1px solid var(--border-light);
-      }
-
-      .nav-links a::after {
-        display: none;
-      }
-
-      .hero {
-        padding: calc(var(--header-h) + 48px) 0 64px;
-      }
-
-      .downloader-card {
-        padding: 20px;
-      }
-
-      .input-group {
-        flex-direction: column;
-      }
-
-      .download-btn {
-        width: 100%;
-      }
-
-      .result-preview {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-
-      .thumbnail-wrapper {
-        width: 140px;
-      }
-
-      .result-info {
-        align-items: center;
-      }
-
-      .section {
-        padding: 72px 0;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 0 16px;
-      }
-
-      .hero-title {
-        font-size: 1.875rem;
-      }
-
-      .url-input {
-        padding-right: 88px;
-      }
+      .section { padding: 64px 0; }
+      .footer-cols { gap: 32px; }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <header class="header">
-    <nav class="nav container">
+  <header class="nav" id="nav">
+    <div class="nav-inner">
       <a href="/" class="logo">
-        <span class="logo-icon">▶</span>
-        <span class="logo-text">InstaSave</span>
+        <span class="logo-mark">▶</span>
+        InstaSave
       </a>
-      <button class="nav-toggle" aria-label="Toggle navigation" id="navToggle">
-        <span></span><span></span><span></span>
-      </button>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="#about">About</a></li>
-      </ul>
-    </nav>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#how">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a href="#about">About</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle theme">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+        </button>
+        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
   </header>
 
-  <main>
-    <!-- Hero -->
-    <section class="hero" id="home">
-      <div class="container hero-content">
-        <div class="hero-badge">Premium Instagram Downloader</div>
-        <h1 class="hero-title">Download Instagram Videos Instantly</h1>
-        <p class="hero-subtitle">
-          Save your favourite Instagram videos, reels and public content in just a few clicks. Fast, simple and hassle-free.
-        </p>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#home">Home</a>
+    <a href="#how">How it works</a>
+    <a href="#faq">FAQ</a>
+    <a href="#about">About</a>
+  </div>
 
-        <!-- Downloader Card -->
-        <div class="downloader-card" id="downloader">
-          <div class="input-group">
-            <div class="input-wrapper">
-              <svg class="input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  <main>
+    <section class="hero" id="home">
+      <div class="container">
+        <div class="hero-badge">Instagram Video Downloader</div>
+        <h1>Download videos<br>instantly</h1>
+        <p class="hero-sub">Save public Instagram videos and Reels in one click. Fast, clean, no account needed.</p>
+
+        <div class="downloader">
+          <div class="input-row">
+            <div class="input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
               </svg>
-              <input
-                type="url"
-                id="urlInput"
-                class="url-input"
-                placeholder="Paste Instagram video or Reel URL here..."
-                autocomplete="off"
-                spellcheck="false"
-                aria-label="Instagram video or Reel URL"
-              />
-              <button type="button" class="paste-btn" id="pasteBtn" aria-label="Paste from clipboard">
-                Paste
-              </button>
+              <input type="url" id="urlInput" class="url-input" placeholder="Paste Instagram link here..." autocomplete="off" spellcheck="false" aria-label="Instagram URL" />
+              <button type="button" class="paste-btn" id="pasteBtn">Paste</button>
             </div>
-            <button type="button" class="download-btn" id="downloadBtn">
+            <button type="button" class="dl-btn" id="downloadBtn">
               <span class="btn-text">Download</span>
               <span class="btn-loader">
                 <svg class="spinner" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="30 70" />
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="30 70"/>
                 </svg>
               </span>
             </button>
           </div>
-
-          <!-- Status Messages -->
-          <div class="status-message" id="statusMessage" hidden></div>
-
-
+          <div class="status" id="statusMessage"></div>
+          <div class="progress" id="progressWrap">
+            <div class="progress-top">
+              <span id="progressLabel">Preparing...</span>
+              <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Features -->
-    <section class="features section" id="features">
+    <section class="section" id="features">
       <div class="container">
-        <div class="section-header">
-          <h2>Why Choose InstaSave</h2>
-          <p>Everything you need for a seamless download experience</p>
-        </div>
+        <p class="section-label">Features</p>
+        <h2 class="section-title">Built for speed & simplicity</h2>
+        <p class="section-desc">Everything you need to save Instagram videos without friction.</p>
         <div class="features-grid">
-          <article class="feature-card">
-            <div class="feature-icon gradient-1">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-              </svg>
+          <article class="feature">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             </div>
-            <h3>Fast Downloads</h3>
-            <p>Quick processing with a simple user experience. Get your videos in seconds.</p>
+            <h3>Fast downloads</h3>
+            <p>Quick processing with a clean flow. Get your video in seconds.</p>
           </article>
-          <article class="feature-card">
-            <div class="feature-icon gradient-2">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                <line x1="8" y1="21" x2="16" y2="21"></line>
-                <line x1="12" y1="17" x2="12" y2="21"></line>
-              </svg>
+          <article class="feature">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
-            <h3>High Quality</h3>
-            <p>Preserve the available original video quality. No compression or watermarks.</p>
+            <h3>Original quality</h3>
+            <p>We preserve the available quality. No unnecessary compression.</p>
           </article>
-          <article class="feature-card">
-            <div class="feature-icon gradient-3">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>
+          <article class="feature">
+            <div class="feature-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
-            <h3>No Registration</h3>
-            <p>No account creation required. Just paste the link and download instantly.</p>
+            <h3>No sign-up</h3>
+            <p>No account, no tracking wall. Paste a link and download.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- How It Works -->
-    <section class="how-it-works section" id="how-it-works">
+    <section class="section section-alt" id="how">
       <div class="container">
-        <div class="section-header">
-          <h2>How It Works</h2>
-          <p>Three simple steps to download any public Instagram video</p>
-        </div>
+        <p class="section-label">How it works</p>
+        <h2 class="section-title">Three simple steps</h2>
+        <p class="section-desc">From Instagram to your device in moments.</p>
         <div class="steps">
           <div class="step">
-            <div class="step-number">01</div>
-            <h3>Copy Instagram Link</h3>
-            <p>Copy the link of a supported public Instagram video or Reel.</p>
+            <div class="step-num">1</div>
+            <h3>Copy the link</h3>
+            <p>Copy a public Instagram video or Reel URL.</p>
           </div>
-          <div class="step-connector"></div>
           <div class="step">
-            <div class="step-number">02</div>
-            <h3>Paste the Link</h3>
-            <p>Paste it into our downloader input field above.</p>
+            <div class="step-num">2</div>
+            <h3>Paste it here</h3>
+            <p>Paste into the box above or use the Paste button.</p>
           </div>
-          <div class="step-connector"></div>
           <div class="step">
-            <div class="step-number">03</div>
-            <h3>Download Video</h3>
-            <p>Preview and download the available video in high quality.</p>
+            <div class="step-num">3</div>
+            <h3>Download</h3>
+            <p>Tap Download — the file starts saving automatically.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- FAQ -->
-    <section class="faq section" id="faq">
+    <section class="section" id="faq">
       <div class="container">
-        <div class="section-header">
-          <h2>Frequently Asked Questions</h2>
-          <p>Everything you need to know about InstaSave</p>
-        </div>
-        <div class="faq-list" id="faqList">
+        <p class="section-label">FAQ</p>
+        <h2 class="section-title">Common questions</h2>
+        <p class="section-desc">Quick answers about using InstaSave.</p>
+        <div class="faq-list">
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">
+            <button class="faq-q" aria-expanded="false">
               <span>How do I download Instagram videos?</span>
-              <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">
-              <p>Copy the link of any public Instagram video or Reel, paste it into the input field above, and click Download. Once processed, you’ll see a preview and a download button.</p>
-            </div>
+            <div class="faq-a"><p>Copy a public video or Reel link, paste it above, and tap Download. The file will start downloading automatically.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">
-              <span>Can I download Instagram Reels?</span>
-              <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+            <button class="faq-q" aria-expanded="false">
+              <span>Can I download Reels?</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">
-              <p>Yes. InstaSave fully supports Instagram Reels as well as regular video posts that are publicly accessible.</p>
-            </div>
+            <div class="faq-a"><p>Yes. Public Reels and regular video posts are supported.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">
+            <button class="faq-q" aria-expanded="false">
               <span>Is registration required?</span>
-              <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">
-              <p>No. You can use InstaSave without creating an account or providing any personal information.</p>
-            </div>
+            <div class="faq-a"><p>No. You can use InstaSave without creating an account.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">
+            <button class="faq-q" aria-expanded="false">
               <span>Does it work on mobile?</span>
-              <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">
-              <p>Absolutely. The website is fully responsive and works great on phones, tablets, and desktops.</p>
-            </div>
+            <div class="faq-a"><p>Yes. The site is fully responsive and works on phones and tablets.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">
+            <button class="faq-q" aria-expanded="false">
               <span>Why is my link not working?</span>
-              <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">
-              <p>Common reasons include: the post is private, the account is restricted, the content has been deleted, or the URL is malformed. Only public Instagram videos and Reels are supported. Make sure you copied the full URL.</p>
-            </div>
+            <div class="faq-a"><p>The post may be private, deleted, or restricted. Only public Instagram videos and Reels are supported.</p></div>
           </div>
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">
-              <span>Is the downloader free?</span>
-              <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="6 9 12 15 18 9"></polyline>
-              </svg>
+            <button class="faq-q" aria-expanded="false">
+              <span>Is it free?</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
-            <div class="faq-answer">
-              <p>Yes. InstaSave is free to use for downloading publicly available Instagram videos and Reels.</p>
-            </div>
+            <div class="faq-a"><p>Yes. InstaSave is free to use for public content.</p></div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- About -->
-    <section class="about section" id="about">
-      <div class="container">
-        <div class="section-header">
-          <h2>About InstaSave</h2>
-        </div>
-        <div class="about-content">
-          <p>
-            InstaSave is a modern, privacy-focused tool that helps you save publicly available Instagram videos and Reels for offline viewing.
-            We process only public content and never store your personal data or the media you download.
-          </p>
-          <p>
-            Our mission is to provide a clean, fast, and reliable experience while respecting creators’ rights and Instagram’s terms of service.
-          </p>
-        </div>
+    <section class="section" id="about" style="padding-top: 40px;">
+      <div class="container" style="text-align: center; max-width: 560px;">
+        <p class="section-label">About</p>
+        <h2 class="section-title">About InstaSave</h2>
+        <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.6;">
+          InstaSave helps you save publicly available Instagram videos and Reels for offline viewing.
+          We process only public content and focus on a clean, fast experience while respecting creators' rights.
+        </p>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-grid">
+      <div class="footer-top">
         <div class="footer-brand">
-          <a href="/" class="logo">
-            <span class="logo-icon">▶</span>
-            <span class="logo-text">InstaSave</span>
-          </a>
-          <p class="footer-tagline">Download Instagram videos instantly.</p>
+          <a href="/" class="logo"><span class="logo-mark">▶</span> InstaSave</a>
+          <p>Download Instagram videos instantly.</p>
         </div>
-        <div class="footer-links">
-          <h4>Product</h4>
-          <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#how-it-works">How It Works</a></li>
-            <li><a href="#faq">FAQ</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4>Legal</h4>
-          <ul>
-            <li><a href="#privacy">Privacy Policy</a></li>
-            <li><a href="#terms">Terms of Service</a></li>
-            <li><a href="#contact">Contact Us</a></li>
-          </ul>
+        <div class="footer-cols">
+          <div>
+            <h4>Product</h4>
+            <a href="#home">Home</a>
+            <a href="#how">How it works</a>
+            <a href="#faq">FAQ</a>
+          </div>
+          <div>
+            <h4>Legal</h4>
+            <a href="#about">About</a>
+            <a href="#faq">Privacy</a>
+            <a href="#faq">Terms</a>
+          </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="copyright">© 2025 InstaSave. All rights reserved.</p>
-        <p class="disclaimer">
-          Disclaimer: Users should only download content they own or have permission to save.
-          Always respect creators’ copyrights and Instagram’s Terms of Use. InstaSave does not host any media files.
-        </p>
+        <p>© 2025 InstaSave. Only download content you own or have permission to save. Respect creators' copyrights and Instagram's Terms of Use. We do not host media files.</p>
       </div>
     </div>
   </footer>
 
   <script>
-    /**
-     * InstaSave — One-click Instagram Downloader
-     */
     (function () {
       'use strict';
 
+      const html = document.documentElement;
+      const nav = document.getElementById('nav');
+      const themeBtn = document.getElementById('themeBtn');
+      const navToggle = document.getElementById('navToggle');
+      const mobileNav = document.getElementById('mobileNav');
       const urlInput = document.getElementById('urlInput');
       const pasteBtn = document.getElementById('pasteBtn');
       const downloadBtn = document.getElementById('downloadBtn');
       const statusMessage = document.getElementById('statusMessage');
-      const navToggle = document.getElementById('navToggle');
-      const navLinks = document.getElementById('navLinks');
-      const header = document.querySelector('.header');
+      const progressWrap = document.getElementById('progressWrap');
+      const progressBar = document.getElementById('progressBar');
+      const progressLabel = document.getElementById('progressLabel');
+      const progressPercent = document.getElementById('progressPercent');
 
-      const INSTAGRAM_REGEX = /^(https?:\/\/)?(www\.)?(instagram\.com|instagr\.am)\/(p|reel|reels|tv)\/[A-Za-z0-9_-]+\/?/i;
-
-      function isValidInstagramUrl(url) {
-        try {
-          const parsed = new URL(url.startsWith('http') ? url : `https://${url}`);
-          return INSTAGRAM_REGEX.test(parsed.href);
-        } catch {
-          return false;
-        }
+      // Theme - saved locally, applies to entire site
+      function applyTheme(theme) {
+        const t = theme === 'dark' ? 'dark' : 'light';
+        html.setAttribute('data-theme', t);
+        try { localStorage.setItem('instasave-theme', t); } catch (e) {}
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#000000' : '#f5f5f7');
       }
 
-      function normalizeUrl(url) {
-        let cleaned = url.trim();
-        if (!cleaned.startsWith('http')) cleaned = `https://${cleaned}`;
-        try {
-          const u = new URL(cleaned);
-          return `${u.origin}${u.pathname.replace(/\/$/, '')}/`;
-        } catch {
-          return cleaned;
+      try {
+        const savedTheme = localStorage.getItem('instasave-theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          applyTheme(savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          applyTheme('dark');
+        } else {
+          applyTheme('light');
         }
+      } catch (e) {
+        applyTheme('light');
       }
 
-      function showStatus(type, message) {
-        statusMessage.hidden = false;
-        statusMessage.className = `status-message ${type}`;
-        statusMessage.textContent = message;
+      if (themeBtn) {
+        themeBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const current = html.getAttribute('data-theme') || 'light';
+          applyTheme(current === 'dark' ? 'light' : 'dark');
+        });
+      }
+
+      // Nav hide on scroll down, show on scroll up
+      let lastY = 0;
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          window.requestAnimationFrame(() => {
+            const y = window.scrollY || 0;
+            if (nav) {
+              if (y > lastY && y > 80) {
+                nav.classList.add('is-hidden');
+                if (mobileNav) mobileNav.classList.remove('open');
+              } else {
+                nav.classList.remove('is-hidden');
+              }
+            }
+            lastY = y;
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      if (navToggle && mobileNav) {
+        navToggle.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          mobileNav.classList.toggle('open');
+        });
+        mobileNav.querySelectorAll('a').forEach((a) => {
+          a.addEventListener('click', () => mobileNav.classList.remove('open'));
+        });
+      }
+
+      const IG_RE = /^(https?:\/\/)?(www\.)?(instagram\.com|instagr\.am)\/(p|reel|reels|tv)\/[A-Za-z0-9_-]+/i;
+
+      function isValid(url) {
+        try {
+          const u = new URL(url.startsWith('http') ? url : 'https://' + url);
+          return IG_RE.test(u.href);
+        } catch { return false; }
+      }
+
+      function normalize(url) {
+        let s = url.trim();
+        if (!s.startsWith('http')) s = 'https://' + s;
+        try {
+          const u = new URL(s);
+          return u.origin + u.pathname.replace(/\/$/, '') + '/';
+        } catch { return s; }
+      }
+
+      function showStatus(type, msg) {
+        if (!msg) {
+          statusMessage.classList.remove('show');
+          statusMessage.textContent = '';
+          return;
+        }
+        statusMessage.className = 'status show ' + type;
+        statusMessage.textContent = msg;
       }
 
       function hideStatus() {
-        statusMessage.hidden = true;
+        statusMessage.classList.remove('show');
         statusMessage.textContent = '';
       }
 
-      function setLoading(isLoading) {
-        downloadBtn.disabled = !!isLoading;
-        if (isLoading) {
-          downloadBtn.classList.add('is-loading');
-        } else {
-          downloadBtn.classList.remove('is-loading');
-        }
+      function setLoading(on) {
+        downloadBtn.disabled = !!on;
+        downloadBtn.classList.toggle('is-loading', !!on);
       }
 
-      // Force real download through our proxy (one-click)
+      function showProgress(pct, label) {
+        progressWrap.classList.add('show');
+        const p = Math.max(0, Math.min(100, pct));
+        progressBar.style.width = p + '%';
+        progressPercent.textContent = Math.round(p) + '%';
+        if (label) progressLabel.textContent = label;
+      }
+
+      function hideProgress() {
+        progressWrap.classList.remove('show');
+        progressBar.style.width = '0%';
+        progressPercent.textContent = '0%';
+        progressLabel.textContent = 'Preparing...';
+      }
+
       function triggerDownload(fileUrl, filename) {
         const name = filename || 'instagram-video.mp4';
-        // Use our /api/file proxy so the browser is forced to download
         const proxyUrl = '/api/file?url=' + encodeURIComponent(fileUrl) +
-                         '&filename=' + encodeURIComponent(name);
-
-        // Method 1: hidden iframe (best for mobile)
+          '&filename=' + encodeURIComponent(name);
         const iframe = document.createElement('iframe');
         iframe.style.display = 'none';
         iframe.src = proxyUrl;
         document.body.appendChild(iframe);
-        setTimeout(() => {
-          try { document.body.removeChild(iframe); } catch(e) {}
-        }, 60000);
-
-        // Method 2: also try anchor click as backup
+        setTimeout(() => { try { document.body.removeChild(iframe); } catch (e) {} }, 60000);
         const a = document.createElement('a');
         a.href = proxyUrl;
         a.download = name;
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
-        setTimeout(() => {
-          try { document.body.removeChild(a); } catch(e) {}
-        }, 2000);
+        setTimeout(() => { try { document.body.removeChild(a); } catch (e) {} }, 2000);
       }
 
       async function processDownload(url) {
         hideStatus();
+        hideProgress();
         setLoading(true);
-
-        // Safety: force stop loading after 25 seconds
-        const safetyTimer = setTimeout(() => {
+        showProgress(12, 'Connecting...');
+        const safety = setTimeout(() => {
           setLoading(false);
+          hideProgress();
           showStatus('error', 'Request timed out. Please try again.');
         }, 25000);
-
         try {
           const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 20000);
-
-          const response = await fetch('/api/download', {
+          const t = setTimeout(() => controller.abort(), 20000);
+          showProgress(30, 'Fetching video...');
+          const res = await fetch('/api/download', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url }),
             signal: controller.signal,
           });
-
-          clearTimeout(timeoutId);
-
+          clearTimeout(t);
+          showProgress(65, 'Preparing file...');
           let data;
-          try {
-            data = await response.json();
-          } catch {
-            throw new Error('Invalid response from server. Please try again.');
-          }
-
-          if (!response.ok) {
-            throw new Error(data.message || data.error || 'Failed to process the link. Please try again.');
-          }
-
-          if (!data.downloadUrl) {
-            throw new Error('No downloadable video found for this link.');
-          }
-
-          // One-step: immediately start the download
+          try { data = await res.json(); }
+          catch { throw new Error('Invalid server response.'); }
+          if (!res.ok) throw new Error(data.message || data.error || 'Failed to process link.');
+          if (!data.downloadUrl) throw new Error('No downloadable video found.');
+          showProgress(90, 'Starting download...');
           triggerDownload(data.downloadUrl, data.filename || 'instagram-video.mp4');
+          showProgress(100, 'Done');
           showStatus('success', 'Download started!');
+          setTimeout(hideProgress, 1600);
         } catch (err) {
-          console.error(err);
-          if (err.name === 'AbortError') {
-            showStatus('error', 'Request timed out. Please try again.');
-          } else {
-            showStatus('error', err.message || 'Something went wrong. Please check the URL and try again.');
-          }
+          hideProgress();
+          showStatus('error', err.name === 'AbortError'
+            ? 'Request timed out. Please try again.'
+            : (err.message || 'Something went wrong.'));
         } finally {
-          clearTimeout(safetyTimer);
+          clearTimeout(safety);
           setLoading(false);
         }
       }
 
-      // ---------- Paste button (clipboard) ----------
       pasteBtn.addEventListener('click', async () => {
         hideStatus();
-
-        // Method 1: Modern Clipboard API (works on HTTPS)
         if (navigator.clipboard && navigator.clipboard.readText) {
           try {
             const text = await navigator.clipboard.readText();
             if (text && text.trim()) {
               urlInput.value = text.trim();
               urlInput.focus();
-              showStatus('success', 'Link pasted!');
-              setTimeout(hideStatus, 1500);
+              showStatus('success', 'Link pasted');
+              setTimeout(hideStatus, 1400);
               return;
             }
-          } catch (err) {
-            // Permission denied or not allowed – fall through
-          }
+          } catch (e) {}
         }
-
-        // Method 2: Fallback – focus input so user can paste easily
         urlInput.focus();
         urlInput.select();
-
-        // Try older execCommand (some Android browsers)
-        try {
-          const success = document.execCommand('paste');
-          if (success && urlInput.value.trim()) {
-            showStatus('success', 'Link pasted!');
-            setTimeout(hideStatus, 1500);
-            return;
-          }
-        } catch (e) {}
-
-        showStatus('info', 'Tap the box and paste (long-press → Paste)');
+        showStatus('info', 'Tap the box and paste');
       });
 
-      // ---------- Download button ----------
       downloadBtn.addEventListener('click', () => {
         const raw = urlInput.value.trim();
         if (!raw) {
-          showStatus('error', 'Please paste an Instagram video or Reel URL.');
+          showStatus('error', 'Please paste an Instagram link.');
           urlInput.focus();
           return;
         }
-
-        const url = normalizeUrl(raw);
-        if (!isValidInstagramUrl(url)) {
-          showStatus('error', 'Invalid Instagram URL. Please use a public post, Reel or IGTV link.');
+        const url = normalize(raw);
+        if (!isValid(url)) {
+          showStatus('error', 'Invalid Instagram URL. Use a public post or Reel.');
           urlInput.focus();
           return;
         }
-
         processDownload(url);
       });
 
-      // Enter key
       urlInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          downloadBtn.click();
-        }
+        if (e.key === 'Enter') downloadBtn.click();
       });
+      urlInput.addEventListener('input', hideStatus);
 
-      // Clear status when typing
-      urlInput.addEventListener('input', () => {
-        hideStatus();
-      });
-
-      // ---------- Mobile Nav ----------
-      navToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('open');
-      });
-
-      navLinks.querySelectorAll('a').forEach((link) => {
-        link.addEventListener('click', () => {
-          navLinks.classList.remove('open');
-        });
-      });
-
-      // ---------- Header scroll ----------
-      window.addEventListener('scroll', () => {
-        header.classList.toggle('scrolled', window.scrollY > 10);
-      }, { passive: true });
-
-      // ---------- FAQ Accordion ----------
-      document.querySelectorAll('.faq-question').forEach((btn) => {
+      document.querySelectorAll('.faq-q').forEach((btn) => {
         btn.addEventListener('click', () => {
           const item = btn.closest('.faq-item');
-          const isActive = item.classList.contains('active');
-
+          const open = item.classList.contains('active');
           document.querySelectorAll('.faq-item').forEach((i) => {
             i.classList.remove('active');
-            i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+            i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
           });
-
-          if (!isActive) {
+          if (!open) {
             item.classList.add('active');
             btn.setAttribute('aria-expanded', 'true');
           }
         });
       });
 
-      // ---------- Smooth scroll ----------
-      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-        anchor.addEventListener('click', (e) => {
-          const targetId = anchor.getAttribute('href');
-          if (targetId === '#') return;
-          const target = document.querySelector(targetId);
-          if (target) {
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          if (id === '#') return;
+          const el = document.querySelector(id);
+          if (el) {
             e.preventDefault();
-            const top = target.getBoundingClientRect().top + window.pageYOffset - 80;
+            const top = el.getBoundingClientRect().top + window.pageYOffset - 60;
             window.scrollTo({ top, behavior: 'smooth' });
           }
         });
