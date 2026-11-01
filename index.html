@@ -1269,16 +1269,32 @@
         }
       }
 
-      // Direct download – one step only
+      // Force real download through our proxy (one-click)
       function triggerDownload(fileUrl, filename) {
+        const name = filename || 'instagram-video.mp4';
+        // Use our /api/file proxy so the browser is forced to download
+        const proxyUrl = '/api/file?url=' + encodeURIComponent(fileUrl) +
+                         '&filename=' + encodeURIComponent(name);
+
+        // Method 1: hidden iframe (best for mobile)
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = proxyUrl;
+        document.body.appendChild(iframe);
+        setTimeout(() => {
+          try { document.body.removeChild(iframe); } catch(e) {}
+        }, 60000);
+
+        // Method 2: also try anchor click as backup
         const a = document.createElement('a');
-        a.href = fileUrl;
-        a.download = filename || 'instagram-video.mp4';
-        a.target = '_blank';
-        a.rel = 'noopener';
+        a.href = proxyUrl;
+        a.download = name;
+        a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
+        setTimeout(() => {
+          try { document.body.removeChild(a); } catch(e) {}
+        }, 2000);
       }
 
       async function processDownload(url) {
