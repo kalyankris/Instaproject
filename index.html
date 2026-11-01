@@ -312,22 +312,34 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .status {
-      margin-top: 14px; padding: 12px 14px; border-radius: 14px;
-      font-size: 0.875rem; font-weight: 500; display: none;
+      margin-top: 0; padding: 0 14px; border-radius: 14px;
+      font-size: 0.875rem; font-weight: 500;
+      max-height: 0; opacity: 0; overflow: hidden;
+      border: 1px solid transparent;
+      transition: max-height 0.28s var(--ease), opacity 0.22s ease, padding 0.22s ease, margin 0.22s ease;
+      pointer-events: none;
     }
-    .status.show { display: block; }
+    .status.show {
+      max-height: 72px; opacity: 1; margin-top: 14px; padding: 12px 14px;
+      pointer-events: auto;
+    }
     .status.error {
-      background: rgba(248, 113, 113, 0.12); border: 1px solid rgba(248, 113, 113, 0.25); color: var(--error);
+      background: rgba(248, 113, 113, 0.12); border-color: rgba(248, 113, 113, 0.25); color: var(--error);
     }
     .status.success {
-      background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.25); color: var(--success);
+      background: rgba(52, 211, 153, 0.12); border-color: rgba(52, 211, 153, 0.25); color: var(--success);
     }
     .status.info {
-      background: rgba(91, 140, 255, 0.12); border: 1px solid rgba(91, 140, 255, 0.22); color: var(--accent);
+      background: rgba(91, 140, 255, 0.12); border-color: rgba(91, 140, 255, 0.22); color: var(--accent);
     }
 
-    .progress { margin-top: 18px; display: none; }
-    .progress.show { display: block; }
+    .progress {
+      margin-top: 0; max-height: 0; opacity: 0; overflow: hidden;
+      transition: max-height 0.28s var(--ease), opacity 0.22s ease, margin 0.22s ease;
+    }
+    .progress.show {
+      max-height: 80px; opacity: 1; margin-top: 18px;
+    }
     .progress-top {
       display: flex; justify-content: space-between; font-size: 0.82rem;
       color: var(--text-2); margin-bottom: 10px;
@@ -837,30 +849,41 @@
       }
     }
 
-    pasteBtn.addEventListener('click', async () => {
+    pasteBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       showStatus('', '');
       try {
         if (navigator.clipboard && navigator.clipboard.readText) {
           const text = await navigator.clipboard.readText();
           if (text && text.trim()) {
             urlInput.value = text.trim();
-            urlInput.focus();
+            try { urlInput.focus({ preventScroll: true }); } catch (_) { urlInput.focus(); }
             showStatus('success', 'Link pasted');
             setTimeout(() => showStatus('', ''), 1200);
             return;
           }
         }
-      } catch {}
-      urlInput.focus();
-      urlInput.select();
+      } catch (_) {}
+      try { urlInput.focus({ preventScroll: true }); } catch (_) { urlInput.focus(); }
+      try { urlInput.select(); } catch (_) {}
       showStatus('info', 'Tap the field and paste your link');
     });
 
-    downloadBtn.addEventListener('click', () => {
+    downloadBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       const raw = urlInput.value.trim();
-      if (!raw) { showStatus('error', 'Please paste an Instagram video or Reel URL.'); urlInput.focus(); return; }
+      if (!raw) {
+        showStatus('error', 'Please paste an Instagram video or Reel URL.');
+        try { urlInput.focus({ preventScroll: true }); } catch (_) { urlInput.focus(); }
+        return;
+      }
       const url = normalizeUrl(raw);
-      if (!isValid(url)) { showStatus('error', 'Invalid Instagram URL. Use a public post or Reel link.'); urlInput.focus(); return; }
+      if (!isValid(url)) {
+        showStatus('error', 'Invalid Instagram URL. Use a public post or Reel link.');
+        try { urlInput.focus({ preventScroll: true }); } catch (_) { urlInput.focus(); }
+        return;
+      }
       processDownload(url);
     });
 
