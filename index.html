@@ -354,6 +354,105 @@
     }
     @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 
+    /* Result file tile */
+    .result-tile {
+      display: none;
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--glass-2);
+      border: 1px solid var(--stroke);
+      align-items: center;
+      gap: 14px;
+      animation: tileIn 0.35s var(--ease);
+    }
+    .result-tile.show { display: flex; }
+    @keyframes tileIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .result-thumb {
+      position: relative;
+      width: 64px; height: 64px; flex-shrink: 0;
+      border-radius: 14px; overflow: hidden;
+      background: var(--glass-3);
+      border: 1px solid var(--stroke);
+    }
+    .result-thumb-placeholder {
+      position: absolute; inset: 0;
+      display: grid; place-items: center;
+      color: var(--text-3);
+    }
+    .result-thumb img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover;
+      display: none;
+    }
+    .result-thumb img.loaded { display: block; }
+    .result-thumb.has-img .result-thumb-placeholder { display: none; }
+    .result-ring {
+      position: absolute; inset: 0;
+      display: grid; place-items: center;
+      background: rgba(0,0,0,0.45);
+      transition: opacity 0.3s;
+    }
+    .result-tile.is-done .result-ring { opacity: 0; pointer-events: none; }
+    .result-ring svg { width: 44px; height: 44px; transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: rgba(255,255,255,0.2); stroke-width: 2.5; }
+    .ring-fg {
+      fill: none; stroke: #fff; stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-dasharray: 97.4;
+      stroke-dashoffset: 97.4;
+      transition: stroke-dashoffset 0.35s var(--ease);
+    }
+    .ring-pct {
+      position: absolute; font-size: 0.68rem; font-weight: 700; color: #fff;
+    }
+    .result-meta { flex: 1; min-width: 0; }
+    .result-title {
+      font-size: 0.92rem; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-bottom: 3px;
+    }
+    .result-sub {
+      font-size: 0.78rem; color: var(--text-2);
+      margin-bottom: 8px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .result-bar-wrap {
+      height: 5px; border-radius: 99px; background: var(--glass-3); overflow: hidden;
+    }
+    .result-bar {
+      height: 100%; width: 0%; border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+      background-size: 200% 100%;
+      animation: shimmer 1.4s linear infinite;
+      transition: width 0.35s var(--ease);
+    }
+    .result-tile.is-done .result-bar {
+      width: 100% !important;
+      background: var(--success);
+      animation: none;
+    }
+    .result-actions { flex-shrink: 0; }
+    .result-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 36px; padding: 0 14px; border-radius: 11px;
+      font-size: 0.8rem; font-weight: 600; color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 6px 16px rgba(91,140,255,0.3);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .result-btn:hover { transform: scale(1.03); box-shadow: 0 8px 20px rgba(91,140,255,0.4); }
+    .result-done {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 36px; padding: 0 12px; border-radius: 11px;
+      font-size: 0.8rem; font-weight: 600; color: var(--success);
+      background: rgba(52, 211, 153, 0.12);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+    }
+
     .section { padding: 80px 0; }
     .section-head { text-align: center; margin-bottom: 48px; }
     .section-head p {
@@ -508,6 +607,36 @@
               <strong id="progressPercent">0%</strong>
             </div>
             <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+          </div>
+
+          <div class="result-tile" id="resultTile" hidden>
+            <div class="result-thumb" id="resultThumb">
+              <div class="result-thumb-placeholder" id="resultThumbPh">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M5 19h14"/>
+                </svg>
+              </div>
+              <img id="resultThumbImg" alt="" />
+              <div class="result-ring" id="resultRing" aria-hidden="true">
+                <svg viewBox="0 0 36 36"><circle class="ring-bg" cx="18" cy="18" r="15.5"/><circle class="ring-fg" id="resultRingFg" cx="18" cy="18" r="15.5"/></svg>
+                <span class="ring-pct" id="resultRingPct">0%</span>
+              </div>
+            </div>
+            <div class="result-meta">
+              <div class="result-title" id="resultTitle">Preparing download…</div>
+              <div class="result-sub" id="resultSub">Fetching video info</div>
+              <div class="result-bar-wrap"><div class="result-bar" id="resultBar"></div></div>
+            </div>
+            <div class="result-actions">
+              <button type="button" class="result-btn" id="resultDlBtn" hidden>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M5 19h14"/></svg>
+                Save again
+              </button>
+              <span class="result-done" id="resultDone" hidden>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                Downloaded
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -775,6 +904,20 @@
       try { return IG_RE.test(new URL(url.startsWith('http') ? url : 'https://' + url).href); }
       catch { return false; }
     }
+    const resultTile = document.getElementById('resultTile');
+    const resultTitle = document.getElementById('resultTitle');
+    const resultSub = document.getElementById('resultSub');
+    const resultBar = document.getElementById('resultBar');
+    const resultRingFg = document.getElementById('resultRingFg');
+    const resultRingPct = document.getElementById('resultRingPct');
+    const resultThumb = document.getElementById('resultThumb');
+    const resultThumbImg = document.getElementById('resultThumbImg');
+    const resultDlBtn = document.getElementById('resultDlBtn');
+    const resultDone = document.getElementById('resultDone');
+    const RING_LEN = 97.4;
+    let lastFileUrl = null;
+    let lastFilename = null;
+
     function showStatus(type, msg) {
       if (!msg) { statusMessage.className = 'status'; statusMessage.textContent = ''; return; }
       statusMessage.className = 'status show ' + type;
@@ -785,7 +928,8 @@
       downloadBtn.classList.toggle('is-loading', !!on);
     }
     function showProgress(pct, label) {
-      progressWrap.classList.add('show');
+      // Prefer the result tile; keep legacy bar hidden to avoid double UI
+      progressWrap.classList.remove('show');
       const p = Math.max(0, Math.min(100, pct));
       progressBar.style.width = p + '%';
       progressPercent.textContent = Math.round(p) + '%';
@@ -796,33 +940,85 @@
       progressBar.style.width = '0%';
       progressPercent.textContent = '0%';
     }
+
+    function openTile() {
+      resultTile.hidden = false;
+      resultTile.classList.add('show');
+      resultTile.classList.remove('is-done');
+      resultDlBtn.hidden = true;
+      resultDone.hidden = true;
+      resultThumb.classList.remove('has-img');
+      resultThumbImg.classList.remove('loaded');
+      resultThumbImg.removeAttribute('src');
+      setTileProgress(0, 'Preparing download…', 'Connecting to Instagram');
+    }
+    function setTileProgress(pct, title, sub) {
+      const p = Math.max(0, Math.min(100, pct));
+      if (title) resultTitle.textContent = title;
+      if (sub) resultSub.textContent = sub;
+      resultBar.style.width = p + '%';
+      resultRingPct.textContent = Math.round(p) + '%';
+      if (resultRingFg) resultRingFg.style.strokeDashoffset = String(RING_LEN * (1 - p / 100));
+      showProgress(p, sub || title);
+    }
+    function setTileThumb(url) {
+      if (!url) return;
+      resultThumbImg.onload = function () {
+        resultThumbImg.classList.add('loaded');
+        resultThumb.classList.add('has-img');
+      };
+      resultThumbImg.onerror = function () {};
+      resultThumbImg.src = url;
+    }
+    function finishTile(filename, title) {
+      setTileProgress(100, title || filename || 'instagram-video.mp4', 'Ready on your device');
+      resultTile.classList.add('is-done');
+      resultDlBtn.hidden = false;
+      resultDone.hidden = false;
+      hideProgress();
+      showStatus('success', 'Download started — check your downloads folder.');
+    }
+    function hideTile() {
+      resultTile.classList.remove('show', 'is-done');
+      resultTile.hidden = true;
+    }
+
     function triggerDownload(fileUrl, filename) {
       const name = filename || 'instagram-video.mp4';
+      lastFileUrl = fileUrl;
+      lastFilename = name;
       const proxyUrl = '/api/file?url=' + encodeURIComponent(fileUrl) + '&filename=' + encodeURIComponent(name);
       const iframe = document.createElement('iframe');
       iframe.style.display = 'none';
       iframe.src = proxyUrl;
       document.body.appendChild(iframe);
-      setTimeout(() => { try { document.body.removeChild(iframe); } catch {} }, 60000);
+      setTimeout(() => { try { document.body.removeChild(iframe); } catch (_) {} }, 60000);
       const a = document.createElement('a');
       a.href = proxyUrl; a.download = name; a.style.display = 'none';
       document.body.appendChild(a); a.click();
-      setTimeout(() => { try { document.body.removeChild(a); } catch {} }, 2000);
+      setTimeout(() => { try { document.body.removeChild(a); } catch (_) {} }, 2000);
+    }
+
+    if (resultDlBtn) {
+      resultDlBtn.addEventListener('click', function () {
+        if (lastFileUrl) triggerDownload(lastFileUrl, lastFilename);
+      });
     }
 
     async function processDownload(url) {
       showStatus('', '');
       hideProgress();
+      openTile();
       setLoading(true);
-      showProgress(12, 'Connecting...');
+      setTileProgress(8, 'Preparing download…', 'Connecting…');
       const safety = setTimeout(() => {
-        setLoading(false); hideProgress();
+        setLoading(false); hideProgress(); hideTile();
         showStatus('error', 'Request timed out. Please try again.');
       }, 25000);
       try {
         const controller = new AbortController();
         const t = setTimeout(() => controller.abort(), 20000);
-        showProgress(35, 'Fetching video info...');
+        setTileProgress(28, 'Preparing download…', 'Fetching video info…');
         const res = await fetch('/api/download', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -830,18 +1026,24 @@
           signal: controller.signal
         });
         clearTimeout(t);
-        showProgress(70, 'Preparing file...');
+        setTileProgress(55, 'Preparing download…', 'Parsing media…');
         let data;
-        try { data = await res.json(); } catch { throw new Error('Invalid server response.'); }
+        try { data = await res.json(); } catch (_) { throw new Error('Invalid server response.'); }
         if (!res.ok) throw new Error(data.message || data.error || 'Failed to process the link.');
         if (!data.downloadUrl) throw new Error('No downloadable video found for this link.');
-        showProgress(92, 'Starting download...');
-        triggerDownload(data.downloadUrl, data.filename || 'instagram-video.mp4');
-        showProgress(100, 'Download started');
-        showStatus('success', 'Download started!');
-        setTimeout(hideProgress, 1600);
+
+        const fname = data.filename || 'instagram-video.mp4';
+        const niceTitle = (data.title && String(data.title).trim()) ? String(data.title).trim() : fname;
+        if (data.thumbnail) setTileThumb(data.thumbnail);
+        setTileProgress(78, niceTitle, 'Starting file transfer…');
+        triggerDownload(data.downloadUrl, fname);
+        setTileProgress(96, niceTitle, 'Almost done…');
+        setTimeout(function () {
+          finishTile(fname, niceTitle);
+        }, 450);
       } catch (err) {
         hideProgress();
+        hideTile();
         showStatus('error', err.name === 'AbortError' ? 'Request timed out. Please try again.' : (err.message || 'Something went wrong.'));
       } finally {
         clearTimeout(safety);
