@@ -847,7 +847,7 @@
       dlPanel.hidden = false;
       dlPanel.classList.add('show');
       dlPanel.classList.remove('is-done');
-      setPanel(0, 'Starting download…', 'Getting things ready');
+      setPanel(0, 'Preparing…', 'Connecting');
     }
     function setPanel(pct, title, sub) {
       const p = Math.max(0, Math.min(100, Math.round(pct)));
@@ -856,8 +856,9 @@
       dlPanelPct.textContent = p + '%';
       dlPanelBar.style.width = p + '%';
     }
-    function finishPanel() {
-      setPanel(100, 'Downloaded', 'Saved to your device');
+    function handoffPanel() {
+      // Browser owns the real file transfer — don't claim "Downloaded" yet
+      setPanel(100, 'Saving file…', 'Watch your browser download bar');
       dlPanel.classList.add('is-done');
       showStatus('', '');
     }
@@ -869,14 +870,14 @@
     function triggerDownload(fileUrl, filename) {
       const name = filename || 'instagram-video.mp4';
       const proxyUrl = '/api/file?url=' + encodeURIComponent(fileUrl) + '&filename=' + encodeURIComponent(name);
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = proxyUrl;
-      document.body.appendChild(iframe);
-      setTimeout(() => { try { document.body.removeChild(iframe); } catch (_) {} }, 60000);
+      // One trigger only — avoids double browser download UI
       const a = document.createElement('a');
-      a.href = proxyUrl; a.download = name; a.style.display = 'none';
-      document.body.appendChild(a); a.click();
+      a.href = proxyUrl;
+      a.download = name;
+      a.rel = 'noopener';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
       setTimeout(() => { try { document.body.removeChild(a); } catch (_) {} }, 2000);
     }
 
@@ -884,7 +885,7 @@
       showStatus('', '');
       openPanel();
       setLoading(true);
-      setPanel(5, 'Starting download…', 'Connecting');
+      setPanel(10, 'Preparing…', 'Connecting');
       const safety = setTimeout(() => {
         setLoading(false); hidePanel();
         showStatus('error', 'Request timed out. Please try again.');
@@ -892,7 +893,7 @@
       try {
         const controller = new AbortController();
         const t = setTimeout(() => controller.abort(), 20000);
-        setPanel(25, 'Starting download…', 'Fetching video info');
+        setPanel(30, 'Preparing…', 'Fetching video info');
         const res = await fetch('/api/download', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -900,19 +901,16 @@
           signal: controller.signal
         });
         clearTimeout(t);
-        setPanel(55, 'Downloading…', 'Preparing your file');
+        setPanel(60, 'Preparing…', 'Getting download link');
         let data;
         try { data = await res.json(); } catch (_) { throw new Error('Invalid server response.'); }
         if (!res.ok) throw new Error(data.message || data.error || 'Failed to process the link.');
         if (!data.downloadUrl) throw new Error('No downloadable video found for this link.');
 
         const fname = data.filename || 'instagram-video.mp4';
-        setPanel(80, 'Downloading…', 'Transferring file');
+        setPanel(90, 'Ready…', 'Starting browser download');
         triggerDownload(data.downloadUrl, fname);
-        setPanel(95, 'Almost done…', 'Finishing up');
-        setTimeout(function () {
-          finishPanel();
-        }, 400);
+        setTimeout(handoffPanel, 250);
       } catch (err) {
         hidePanel();
         showStatus('error', err.name === 'AbortError' ? 'Request timed out. Please try again.' : (err.message || 'Something went wrong.'));
