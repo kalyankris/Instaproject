@@ -1,3 +1,4 @@
+
 /**
  * Vercel Serverless Function
  * GET /api/file?url=...&filename=...
@@ -48,20 +49,23 @@ export default async function handler(req, res) {
       return res.status(upstream.status).json({ error: 'upstream_failed' });
     }
 
-    const contentType = upstream.headers.get('content-type') || 'video/mp4';
-    const contentLength = upstream.headers.get('content-length');
+    const contentType = (upstream.headers.get('content-type') || 'video/mp4').toLowerCase();
+    if (contentType.includes('application/json') || contentType.includes('text/html')) {
+      return res.status(502).json({ error: 'invalid_media', message: 'Upstream did not return a video file.' });
+    }
+
+    const buffer = Buffer.from(await upstream.arrayBuffer());
+    if (!buffer.length || buffer.length < 50 * 1024) {
+      return res.status(502).json({ error: 'empty_file', message: 'Downloaded file was empty or too small.' });
+    }
 
     const safeName = (filename || 'instagram-video.mp4').replace(/[^\w.\-]+/g, '_');
 
-    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Type', contentType.startsWith('video/') ? contentType : 'video/mp4');
     res.setHeader('Content-Disposition', `attachment; filename="${safeName}"`);
     res.setHeader('Cache-Control', 'no-store');
-    if (contentLength) {
-      res.setHeader('Content-Length', contentLength);
-    }
+    res.setHeader('Content-Length', String(buffer.length));
 
-    // Stream the body
-    const buffer = Buffer.from(await upstream.arrayBuffer());
     return res.status(200).send(buffer);
   } catch (err) {
     console.error('[file proxy]', err);
