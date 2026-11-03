@@ -2,10 +2,10 @@
 /**
  * Vercel Serverless Function
  * POST /api/download
+ * Resolves an Instagram URL to a direct media download_url via FastSaver.
  */
 
 export default async function handler(req, res) {
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -31,7 +31,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // Strip tracking query/hash so provider gets a clean post/reel URL
+    // Strip tracking query/hash
     let cleanUrl = url.trim();
     try {
       const parsed = new URL(cleanUrl.startsWith('http') ? cleanUrl : 'https://' + cleanUrl);
@@ -40,8 +40,8 @@ export default async function handler(req, res) {
       cleanUrl = url.trim();
     }
 
-    // Basic Instagram URL validation
-    const instagramRegex = /^(https?:\/\/)?(www\.)?(instagram\.com|instagr\.am)\/(p|reel|reels|tv)\/[A-Za-z0-9_-]+/i;
+    const instagramRegex =
+      /^(https?:\/\/)?(www\.)?(instagram\.com|instagr\.am)\/(p|reel|reels|tv)\/[A-Za-z0-9_-]+/i;
     if (!instagramRegex.test(cleanUrl)) {
       return res.status(400).json({
         error: 'invalid_url',
@@ -57,7 +57,8 @@ export default async function handler(req, res) {
       });
     }
 
-    const endpoint = `https://api.fastsaver.io/v1/fetch?url=${encodeURIComponent(cleanUrl)}`;
+    const endpoint =
+      'https://api.fastsaver.io/v1/fetch?url=' + encodeURIComponent(cleanUrl);
 
     const response = await fetch(endpoint, {
       method: 'GET',
@@ -69,30 +70,90 @@ export default async function handler(req, res) {
 
     const data = await response.json().catch(() => ({}));
 
-    if (!response.ok) {
-      return res.status(response.status === 404 ? 404 : 502).json({
+    // FastSaver: read `ok`, not only HTTP status
+    if (data.ok === false || (!response.ok && data.ok !== true)) {
+      return res.status(response.status === 404 ? 404 : 400).json({
         error: 'provider_error',
-        message: data.message || data.error || 'Media provider temporarily unavailable.',
+        message:
+          data.message ||
+          data.error ||
+          (response.status === 400
+            ? 'Out of credits or invalid request.'
+            : 'Media provider temporarily unavailable.'),
       });
     }
 
-    const downloadUrl = data.download_url || data.downloadUrl;
+    // Albums/carousels: media is in items[], no top-level download_url
+    let downloadUrl =
+      data.download_url ||
+      data.downloadUrl ||
+      null;
+    let mediaType = data.type || 'video';
+    let thumbnail = data.thumbnail_url || data.thumbnail || null;
+    let title = data.caption || data.title || 'Instagram Video';
+    let mediaId = data.id || 'video';
 
-    if (!downloadUrl) {
+    if (!downloadUrl && Array.isArray(data.items) && data.items.length) {
+      // Prefer first video item, else first item with a URL
+      const videoItem =
+        data.items.find(
+          (it) =>
+            it &&
+            (it.type === 'video' || it.download_url || it.downloadUrl) &&
+            (it.download_url || it.downloadUrl)
+        ) || data.items.find((it) => it && (it.download_url || it.downloadUrl));
+
+      if (videoItem) {
+        downloadUrl = videoItem.download_url || videoItem.downloadUrl;
+        mediaType = videoItem.type || mediaType;
+        thumbnail =
+          videoItem.thumbnail_url || videoItem.thumbnail || thumbnail;
+      }
+    }
+
+    // Some responses nest under media / medias
+    if (!downloadUrl && data.media) {
+      downloadUrl =
+        data.media.download_url ||
+        data.media.downloadUrl ||
+        data.media.url ||
+        null;
+    }
+    if (!downloadUrl && Array.isArray(data.medias)) {
+      const m = data.medias.find((x) => x && (x.download_url || x.url));
+      if (m) downloadUrl = m.download_url || m.url;
+    }
+
+    if (!downloadUrl || typeof downloadUrl !== 'string') {
       return res.status(404).json({
         error: 'not_found',
-        message: data.message || 'No downloadable video found. The post may be private, deleted, or restricted.',
+        message:
+          data.message ||
+          'No downloadable video found. The post may be private, a photo-only carousel, deleted, or restricted.',
       });
     }
+
+    // Must be http(s)
+    if (!/^https?:\/\//i.test(downloadUrl)) {
+      return res.status(502).json({
+        error: 'invalid_media_url',
+        message: 'Provider returned an invalid media URL.',
+      });
+    }
+
+    const safeTitle = String(title || 'Instagram Video')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 120);
 
     return res.status(200).json({
       success: true,
       downloadUrl,
-      thumbnail: data.thumbnail_url || data.thumbnail || null,
-      title: (data.caption || data.title || 'Instagram Video').slice(0, 120),
+      thumbnail,
+      title: safeTitle,
       duration: data.duration || null,
-      type: data.type || 'video',
-      filename: `instagram-${data.id || 'video'}.mp4`,
+      type: mediaType,
+      filename: 'instagram-' + String(mediaId).replace(/[^\w.-]+/g, '') + '.mp4',
     });
   } catch (err) {
     console.error('[download]', err);
