@@ -277,14 +277,24 @@
     .url-input {
       width: 100%; height: 56px; padding: 0 92px 0 46px; border-radius: 16px;
       border: 1px solid var(--stroke); background: var(--glass-2); color: var(--text);
-      font-size: 0.95rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      font-size: 0.95rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s, padding 0.15s;
     }
+    .url-input.has-clear { padding-right: 128px; }
     .url-input::placeholder { color: var(--text-3); }
     .url-input:focus {
       border-color: rgba(91, 140, 255, 0.55);
       box-shadow: 0 0 0 4px rgba(91, 140, 255, 0.15);
       background: var(--glass-3);
     }
+    .clear-btn {
+      position: absolute; right: 78px; width: 28px; height: 28px;
+      border-radius: 50%; display: none; place-items: center;
+      background: var(--glass-3); border: 1px solid var(--stroke);
+      color: var(--text-2); transition: background 0.15s, color 0.15s, transform 0.15s;
+    }
+    .clear-btn.show { display: grid; }
+    .clear-btn:hover { background: var(--stroke-2); color: var(--text); transform: scale(1.06); }
+    .clear-btn svg { width: 12px; height: 12px; }
     .paste-btn {
       position: absolute; right: 8px; height: 40px; padding: 0 15px; border-radius: 12px;
       font-size: 0.84rem; font-weight: 600; background: var(--glass-3);
@@ -543,6 +553,9 @@
                 <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
               </svg>
               <input id="urlInput" class="url-input" type="url" placeholder="Paste Instagram video or Reel URL..." autocomplete="off" spellcheck="false" aria-label="Instagram URL" />
+              <button type="button" class="clear-btn" id="clearBtn" aria-label="Clear link" title="Clear">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
               <button type="button" class="paste-btn" id="pasteBtn">Paste</button>
             </div>
             <button type="button" class="dl-btn" id="downloadBtn">
@@ -727,7 +740,14 @@
     const nav = document.getElementById('nav');
     const urlInput = document.getElementById('urlInput');
     const pasteBtn = document.getElementById('pasteBtn');
+    const clearBtn = document.getElementById('clearBtn');
     const downloadBtn = document.getElementById('downloadBtn');
+
+    function syncClearBtn() {
+      const has = !!(urlInput && urlInput.value.trim());
+      if (clearBtn) clearBtn.classList.toggle('show', has);
+      if (urlInput) urlInput.classList.toggle('has-clear', has);
+    }
     const statusMessage = document.getElementById('statusMessage');
     const dlPanel = document.getElementById('dlPanel');
     const dlPanelTitle = document.getElementById('dlPanelTitle');
@@ -845,24 +865,16 @@
 
     let busy = false;
     let activeController = null;
-    let handoffTimer = null;
     let safetyTimer = null;
-    let lastObjectUrl = null;
+    let jobId = 0;
 
     function clearTimers() {
-      if (handoffTimer) { clearTimeout(handoffTimer); handoffTimer = null; }
       if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
     }
     function abortActive() {
       if (activeController) {
         try { activeController.abort(); } catch (_) {}
         activeController = null;
-      }
-    }
-    function revokeLastUrl() {
-      if (lastObjectUrl) {
-        try { URL.revokeObjectURL(lastObjectUrl); } catch (_) {}
-        lastObjectUrl = null;
       }
     }
 
@@ -879,8 +891,9 @@
       dlPanelPct.textContent = p + '%';
       dlPanelBar.style.width = p + '%';
     }
-    function handoffPanel() {
-      setPanel(100, 'Saving file…', 'Watch your browser download bar');
+    function showStartedPanel() {
+      // Honest: we started the browser download — browser owns the real progress
+      setPanel(100, 'Download started', 'Check your browser downloads');
       dlPanel.classList.add('is-done');
       showStatus('', '');
     }
@@ -898,27 +911,25 @@
       busy = false;
     }
 
-    function saveBlob(blob, filename) {
-      revokeLastUrl();
-      const name = filename || 'instagram-video.mp4';
-      const objectUrl = URL.createObjectURL(blob);
-      lastObjectUrl = objectUrl;
-      const a = document.createElement('a');
-      a.href = objectUrl;
-      a.download = name;
-      a.rel = 'noopener';
-      a.style.display = 'none';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(function () {
-        try { document.body.removeChild(a); } catch (_) {}
-        setTimeout(revokeLastUrl, 60000);
-      }, 1500);
-    }
+    // Reliable repeated downloads: unique same-origin proxy URL each time
+    function startBrowserDownload(fileUrl, filename) {
+      const name = (filename || 'instagram-video.mp4').replace(/[^\w.\-]+/g, '_');
+      const proxyUrl = '/api/file?url=' + encodeURIComponent(fileUrl) +
+        '&filename=' + encodeURIComponent(name) +
+        '&t=' + Date.now() +
+        '&r=' + Math.random().toString(36).slice(2);
 
-    function fallbackLinkDownload(fileUrl, filename) {
-      const name = filename || 'instagram-video.mp4';
-      const proxyUrl = '/api/file?url=' + encodeURIComponent(fileUrl) + '&filename=' + encodeURIComponent(name) + '&t=' + Date.now();
+      // iframe approach works across multiple downloads better than a.click() after await
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'position:fixed;width:0;height:0;border:0;visibility:hidden';
+      iframe.setAttribute('aria-hidden', 'true');
+      iframe.src = proxyUrl;
+      document.body.appendChild(iframe);
+      setTimeout(function () {
+        try { document.body.removeChild(iframe); } catch (_) {}
+      }, 120000);
+
+      // Also try anchor as backup (some browsers prefer it)
       const a = document.createElement('a');
       a.href = proxyUrl;
       a.download = name;
@@ -926,90 +937,79 @@
       a.style.display = 'none';
       document.body.appendChild(a);
       a.click();
-      setTimeout(function () { try { document.body.removeChild(a); } catch (_) {} }, 2000);
+      setTimeout(function () {
+        try { document.body.removeChild(a); } catch (_) {}
+      }, 4000);
+
+      return true;
     }
 
     async function processDownload(url) {
+      // Cancel any previous job fully so every click is a fresh download
       clearTimers();
       abortActive();
+      const myJob = ++jobId;
       busy = true;
       showStatus('', '');
       openPanel();
       setLoading(true);
-      setPanel(8, 'Preparing…', 'Connecting');
+      setPanel(10, 'Preparing…', 'Connecting');
 
       safetyTimer = setTimeout(function () {
+        if (myJob !== jobId) return;
         abortActive();
         busy = false;
         setLoading(false);
         hidePanel();
         showStatus('error', 'Request timed out. Please try again.');
-      }, 45000);
+      }, 40000);
 
       const controller = new AbortController();
       activeController = controller;
 
       try {
-        setPanel(22, 'Preparing…', 'Fetching video info');
+        setPanel(30, 'Preparing…', 'Fetching video info');
         const res = await fetch('/api/download', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url }),
-          signal: controller.signal
+          body: JSON.stringify({ url: url }),
+          signal: controller.signal,
+          cache: 'no-store'
         });
-        setPanel(45, 'Preparing…', 'Getting download link');
+
+        if (myJob !== jobId) return;
+
+        setPanel(65, 'Preparing…', 'Getting download link');
         let data;
-        try { data = await res.json(); } catch (_) { throw new Error('Invalid server response.'); }
-        if (!res.ok) throw new Error(data.message || data.error || 'Failed to process the link.');
-        if (!data.downloadUrl) throw new Error('No downloadable video found for this link.');
-
-        const fname = data.filename || 'instagram-video.mp4';
-        const proxyUrl = '/api/file?url=' + encodeURIComponent(data.downloadUrl) +
-          '&filename=' + encodeURIComponent(fname) + '&t=' + Date.now();
-
-        setPanel(58, 'Downloading…', 'Fetching file');
-        let blob = null;
-        try {
-          const fileRes = await fetch(proxyUrl, { signal: controller.signal, cache: 'no-store' });
-          if (!fileRes.ok) throw new Error('File transfer failed.');
-          const total = Number(fileRes.headers.get('content-length')) || 0;
-          if (fileRes.body && typeof fileRes.body.getReader === 'function' && total > 0) {
-            const reader = fileRes.body.getReader();
-            const chunks = [];
-            let received = 0;
-            while (true) {
-              const step = await reader.read();
-              if (step.done) break;
-              chunks.push(step.value);
-              received += step.value.byteLength;
-              const pct = 58 + Math.min(37, Math.round((received / total) * 37));
-              setPanel(pct, 'Downloading…', Math.round(received / 1024) + ' KB');
-            }
-            blob = new Blob(chunks, { type: fileRes.headers.get('content-type') || 'video/mp4' });
-          } else {
-            blob = await fileRes.blob();
-            setPanel(90, 'Downloading…', 'Almost ready');
-          }
-        } catch (fileErr) {
-          if (fileErr && fileErr.name === 'AbortError') throw fileErr;
-          setPanel(88, 'Ready…', 'Starting browser download');
-          fallbackLinkDownload(data.downloadUrl, fname);
-          handoffTimer = setTimeout(handoffPanel, 300);
-          return;
+        try { data = await res.json(); } catch (_) {
+          throw new Error('Invalid server response.');
+        }
+        if (!res.ok) {
+          throw new Error(data.message || data.error || 'Failed to process the link.');
+        }
+        if (!data.downloadUrl || typeof data.downloadUrl !== 'string') {
+          throw new Error('No downloadable video found for this link.');
         }
 
-        setPanel(96, 'Ready…', 'Saving file');
-        saveBlob(blob, fname);
-        handoffTimer = setTimeout(handoffPanel, 300);
+        // Quick HEAD/GET probe via proxy would be ideal; at minimum require a real URL
+        const fname = data.filename || ('instagram-video-' + Date.now() + '.mp4');
+        setPanel(90, 'Starting…', 'Sending to browser');
+        startBrowserDownload(data.downloadUrl, fname);
+
+        if (myJob !== jobId) return;
+        showStartedPanel();
       } catch (err) {
+        if (myJob !== jobId) return;
         if (err && err.name === 'AbortError') return;
         hidePanel();
         showStatus('error', err.message || 'Something went wrong.');
       } finally {
-        if (activeController === controller) activeController = null;
-        if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
-        busy = false;
-        setLoading(false);
+        if (myJob === jobId) {
+          if (activeController === controller) activeController = null;
+          clearTimers();
+          busy = false;
+          setLoading(false);
+        }
       }
     }
 
@@ -1024,8 +1024,7 @@
           if (text && text.trim()) {
             urlInput.value = text.trim();
             try { urlInput.blur(); } catch (_) {}
-            showStatus('success', 'Link pasted');
-            setTimeout(function () { showStatus('', ''); }, 1200);
+            syncClearBtn();
             return;
           }
         }
@@ -1056,7 +1055,21 @@
         downloadBtn.click();
       }
     });
-    urlInput.addEventListener('input', function () { showStatus('', ''); });
+    urlInput.addEventListener('input', function () {
+      showStatus('', '');
+      syncClearBtn();
+    });
+    if (clearBtn) {
+      clearBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        urlInput.value = '';
+        showStatus('', '');
+        syncClearBtn();
+        // Don't focus — avoids mobile keyboard
+      });
+    }
+    syncClearBtn();
   })();
   </script>
 </body>
