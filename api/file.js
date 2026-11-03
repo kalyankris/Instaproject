@@ -17,13 +17,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'missing_url' });
     }
 
-    // Basic safety: only allow Instagram / Facebook CDN domains
     const allowedHosts = [
       'cdninstagram.com',
       'fbcdn.net',
       'instagram.com',
       'scontent',
       'fna.fbcdn.net',
+      'cdninstagram',
+      'fbcdn',
     ];
 
     let parsed;
@@ -40,35 +41,80 @@ export default async function handler(req, res) {
 
     const upstream = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         Accept: '*/*',
+        Referer: 'https://www.instagram.com/',
       },
+      redirect: 'follow',
     });
 
     if (!upstream.ok) {
-      return res.status(upstream.status).json({ error: 'upstream_failed' });
+      return res.status(upstream.status).json({
+        error: 'upstream_failed',
+        message: 'Could not fetch the video file.',
+      });
     }
 
     const contentType = (upstream.headers.get('content-type') || 'video/mp4').toLowerCase();
     if (contentType.includes('application/json') || contentType.includes('text/html')) {
-      return res.status(502).json({ error: 'invalid_media', message: 'Upstream did not return a video file.' });
+      return res.status(502).json({
+        error: 'invalid_media',
+        message: 'Upstream did not return a video file.',
+      });
     }
 
-    const buffer = Buffer.from(await upstream.arrayBuffer());
-    if (!buffer.length || buffer.length < 50 * 1024) {
-      return res.status(502).json({ error: 'empty_file', message: 'Downloaded file was empty or too small.' });
+    const contentLength = upstream.headers.get('content-length');
+    if (contentLength && Number(contentLength) > 0 && Number(contentLength) < 1024) {
+      return res.status(502).json({
+        error: 'empty_file',
+        message: 'Downloaded file was empty or too small.',
+      });
     }
 
     const safeName = (filename || 'instagram-video.mp4').replace(/[^\w.\-]+/g, '_');
 
     res.setHeader('Content-Type', contentType.startsWith('video/') ? contentType : 'video/mp4');
-    res.setHeader('Content-Disposition', `attachment; filename="${safeName}"`);
-    res.setHeader('Cache-Control', 'no-store');
-    res.setHeader('Content-Length', String(buffer.length));
+    res.setHeader('Content-Disposition', 'attachment; filename="' + safeName + '"');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    if (contentLength) {
+      res.setHeader('Content-Length', contentLength);
+    }
 
+    // Prefer streaming the body when available
+    if (upstream.body && typeof upstream.body.getReader === 'function') {
+      const reader = upstream.body.getReader();
+      const chunks = [];
+      let total = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        total += value.byteLength;
+      }
+      if (total < 1024) {
+        return res.status(502).json({
+          error: 'empty_file',
+          message: 'Downloaded file was empty or too small.',
+        });
+      }
+      const buffer = Buffer.concat(chunks.map((c) => Buffer.from(c)));
+      res.setHeader('Content-Length', String(buffer.length));
+      return res.status(200).send(buffer);
+    }
+
+    const buffer = Buffer.from(await upstream.arrayBuffer());
+    if (buffer.length < 1024) {
+      return res.status(502).json({
+        error: 'empty_file',
+        message: 'Downloaded file was empty or too small.',
+      });
+    }
+    res.setHeader('Content-Length', String(buffer.length));
     return res.status(200).send(buffer);
   } catch (err) {
     console.error('[file proxy]', err);
-    return res.status(500).json({ error: 'proxy_failed', message: err.message });
+    return res.status(500).json({ error: 'proxy_failed', message: err.message || 'Proxy failed' });
   }
 }
