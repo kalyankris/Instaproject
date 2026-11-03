@@ -911,35 +911,36 @@
       busy = false;
     }
 
-    // Reliable repeated downloads: unique same-origin proxy URL each time
+    // Proxy 302s to CDN so large videos are not buffered on Vercel (that was breaking downloads)
     function startBrowserDownload(fileUrl, filename) {
-      const name = (filename || 'instagram-video.mp4').replace(/[^\w.\-]+/g, '_');
+      if (!fileUrl || typeof fileUrl !== 'string') return false;
+      const name = (filename || ('instagram-video-' + Date.now() + '.mp4')).replace(/[^\w.\-]+/g, '_');
       const proxyUrl = '/api/file?url=' + encodeURIComponent(fileUrl) +
         '&filename=' + encodeURIComponent(name) +
         '&t=' + Date.now() +
         '&r=' + Math.random().toString(36).slice(2);
 
-      // iframe approach works across multiple downloads better than a.click() after await
+      // Hidden iframe follows 302 → CDN (works for repeated downloads)
       const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'position:fixed;width:0;height:0;border:0;visibility:hidden';
+      iframe.style.cssText = 'position:fixed;width:0;height:0;border:0;left:-9999px;top:-9999px';
       iframe.setAttribute('aria-hidden', 'true');
       iframe.src = proxyUrl;
       document.body.appendChild(iframe);
       setTimeout(function () {
         try { document.body.removeChild(iframe); } catch (_) {}
-      }, 120000);
+      }, 180000);
 
-      // Also try anchor as backup (some browsers prefer it)
+      // Anchor backup (desktop)
       const a = document.createElement('a');
       a.href = proxyUrl;
-      a.download = name;
+      a.setAttribute('download', name);
       a.rel = 'noopener';
       a.style.display = 'none';
       document.body.appendChild(a);
-      a.click();
+      try { a.click(); } catch (_) {}
       setTimeout(function () {
         try { document.body.removeChild(a); } catch (_) {}
-      }, 4000);
+      }, 5000);
 
       return true;
     }
