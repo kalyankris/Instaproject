@@ -1,3 +1,4 @@
+
 /**
  * Vercel Serverless Function
  * POST /api/download
@@ -30,9 +31,18 @@ export default async function handler(req, res) {
       });
     }
 
+    // Strip tracking query/hash so provider gets a clean post/reel URL
+    let cleanUrl = url.trim();
+    try {
+      const parsed = new URL(cleanUrl.startsWith('http') ? cleanUrl : 'https://' + cleanUrl);
+      cleanUrl = parsed.origin + parsed.pathname.replace(/\/$/, '') + '/';
+    } catch (_) {
+      cleanUrl = url.trim();
+    }
+
     // Basic Instagram URL validation
     const instagramRegex = /^(https?:\/\/)?(www\.)?(instagram\.com|instagr\.am)\/(p|reel|reels|tv)\/[A-Za-z0-9_-]+/i;
-    if (!instagramRegex.test(url.trim())) {
+    if (!instagramRegex.test(cleanUrl)) {
       return res.status(400).json({
         error: 'invalid_url',
         message: 'Invalid Instagram URL. Only public posts, Reels and IGTV are supported.',
@@ -47,7 +57,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const endpoint = `https://api.fastsaver.io/v1/fetch?url=${encodeURIComponent(url.trim())}`;
+    const endpoint = `https://api.fastsaver.io/v1/fetch?url=${encodeURIComponent(cleanUrl)}`;
 
     const response = await fetch(endpoint, {
       method: 'GET',
