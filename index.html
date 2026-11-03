@@ -843,6 +843,29 @@
       downloadBtn.classList.toggle('is-loading', !!on);
     }
 
+    let busy = false;
+    let activeController = null;
+    let handoffTimer = null;
+    let safetyTimer = null;
+    let lastObjectUrl = null;
+
+    function clearTimers() {
+      if (handoffTimer) { clearTimeout(handoffTimer); handoffTimer = null; }
+      if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
+    }
+    function abortActive() {
+      if (activeController) {
+        try { activeController.abort(); } catch (_) {}
+        activeController = null;
+      }
+    }
+    function revokeLastUrl() {
+      if (lastObjectUrl) {
+        try { URL.revokeObjectURL(lastObjectUrl); } catch (_) {}
+        lastObjectUrl = null;
+      }
+    }
+
     function openPanel() {
       dlPanel.hidden = false;
       dlPanel.classList.add('show');
@@ -857,7 +880,6 @@
       dlPanelBar.style.width = p + '%';
     }
     function handoffPanel() {
-      // Browser owns the real file transfer — don't claim "Downloaded" yet
       setPanel(100, 'Saving file…', 'Watch your browser download bar');
       dlPanel.classList.add('is-done');
       showStatus('', '');
@@ -865,12 +887,38 @@
     function hidePanel() {
       dlPanel.classList.remove('show', 'is-done');
       dlPanel.hidden = true;
+      setPanel(0, 'Preparing…', 'Connecting');
+    }
+    function resetUiForNewJob() {
+      clearTimers();
+      abortActive();
+      hidePanel();
+      showStatus('', '');
+      setLoading(false);
+      busy = false;
     }
 
-    function triggerDownload(fileUrl, filename) {
+    function saveBlob(blob, filename) {
+      revokeLastUrl();
       const name = filename || 'instagram-video.mp4';
-      const proxyUrl = '/api/file?url=' + encodeURIComponent(fileUrl) + '&filename=' + encodeURIComponent(name);
-      // One trigger only — avoids double browser download UI
+      const objectUrl = URL.createObjectURL(blob);
+      lastObjectUrl = objectUrl;
+      const a = document.createElement('a');
+      a.href = objectUrl;
+      a.download = name;
+      a.rel = 'noopener';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () {
+        try { document.body.removeChild(a); } catch (_) {}
+        setTimeout(revokeLastUrl, 60000);
+      }, 1500);
+    }
+
+    function fallbackLinkDownload(fileUrl, filename) {
+      const name = filename || 'instagram-video.mp4';
+      const proxyUrl = '/api/file?url=' + encodeURIComponent(fileUrl) + '&filename=' + encodeURIComponent(name) + '&t=' + Date.now();
       const a = document.createElement('a');
       a.href = proxyUrl;
       a.download = name;
@@ -878,44 +926,89 @@
       a.style.display = 'none';
       document.body.appendChild(a);
       a.click();
-      setTimeout(() => { try { document.body.removeChild(a); } catch (_) {} }, 2000);
+      setTimeout(function () { try { document.body.removeChild(a); } catch (_) {} }, 2000);
     }
 
     async function processDownload(url) {
+      clearTimers();
+      abortActive();
+      busy = true;
       showStatus('', '');
       openPanel();
       setLoading(true);
-      setPanel(10, 'Preparing…', 'Connecting');
-      const safety = setTimeout(() => {
-        setLoading(false); hidePanel();
+      setPanel(8, 'Preparing…', 'Connecting');
+
+      safetyTimer = setTimeout(function () {
+        abortActive();
+        busy = false;
+        setLoading(false);
+        hidePanel();
         showStatus('error', 'Request timed out. Please try again.');
-      }, 25000);
+      }, 45000);
+
+      const controller = new AbortController();
+      activeController = controller;
+
       try {
-        const controller = new AbortController();
-        const t = setTimeout(() => controller.abort(), 20000);
-        setPanel(30, 'Preparing…', 'Fetching video info');
+        setPanel(22, 'Preparing…', 'Fetching video info');
         const res = await fetch('/api/download', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ url }),
           signal: controller.signal
         });
-        clearTimeout(t);
-        setPanel(60, 'Preparing…', 'Getting download link');
+        setPanel(45, 'Preparing…', 'Getting download link');
         let data;
         try { data = await res.json(); } catch (_) { throw new Error('Invalid server response.'); }
         if (!res.ok) throw new Error(data.message || data.error || 'Failed to process the link.');
         if (!data.downloadUrl) throw new Error('No downloadable video found for this link.');
 
         const fname = data.filename || 'instagram-video.mp4';
-        setPanel(90, 'Ready…', 'Starting browser download');
-        triggerDownload(data.downloadUrl, fname);
-        setTimeout(handoffPanel, 250);
+        const proxyUrl = '/api/file?url=' + encodeURIComponent(data.downloadUrl) +
+          '&filename=' + encodeURIComponent(fname) + '&t=' + Date.now();
+
+        setPanel(58, 'Downloading…', 'Fetching file');
+        let blob = null;
+        try {
+          const fileRes = await fetch(proxyUrl, { signal: controller.signal, cache: 'no-store' });
+          if (!fileRes.ok) throw new Error('File transfer failed.');
+          const total = Number(fileRes.headers.get('content-length')) || 0;
+          if (fileRes.body && typeof fileRes.body.getReader === 'function' && total > 0) {
+            const reader = fileRes.body.getReader();
+            const chunks = [];
+            let received = 0;
+            while (true) {
+              const step = await reader.read();
+              if (step.done) break;
+              chunks.push(step.value);
+              received += step.value.byteLength;
+              const pct = 58 + Math.min(37, Math.round((received / total) * 37));
+              setPanel(pct, 'Downloading…', Math.round(received / 1024) + ' KB');
+            }
+            blob = new Blob(chunks, { type: fileRes.headers.get('content-type') || 'video/mp4' });
+          } else {
+            blob = await fileRes.blob();
+            setPanel(90, 'Downloading…', 'Almost ready');
+          }
+        } catch (fileErr) {
+          if (fileErr && fileErr.name === 'AbortError') throw fileErr;
+          setPanel(88, 'Ready…', 'Starting browser download');
+          fallbackLinkDownload(data.downloadUrl, fname);
+          handoffTimer = setTimeout(handoffPanel, 300);
+          return;
+        }
+
+        setPanel(96, 'Ready…', 'Saving file');
+        saveBlob(blob, fname);
+        handoffTimer = setTimeout(handoffPanel, 300);
       } catch (err) {
+        if (err && err.name === 'AbortError') return;
         hidePanel();
-        showStatus('error', err.name === 'AbortError' ? 'Request timed out. Please try again.' : (err.message || 'Something went wrong.'));
+        showStatus('error', err.message || 'Something went wrong.');
       } finally {
-        clearTimeout(safety);
+        if (activeController === controller) activeController = null;
+        if (safetyTimer) { clearTimeout(safetyTimer); safetyTimer = null; }
+        busy = false;
         setLoading(false);
       }
     }
@@ -923,43 +1016,47 @@
     pasteBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       e.stopPropagation();
+      // Never focus input on Paste — that opens mobile keyboard and shrinks the UI
       showStatus('', '');
       try {
         if (navigator.clipboard && navigator.clipboard.readText) {
           const text = await navigator.clipboard.readText();
           if (text && text.trim()) {
             urlInput.value = text.trim();
-            try { urlInput.focus({ preventScroll: true }); } catch (_) { urlInput.focus(); }
+            try { urlInput.blur(); } catch (_) {}
             showStatus('success', 'Link pasted');
-            setTimeout(() => showStatus('', ''), 1200);
+            setTimeout(function () { showStatus('', ''); }, 1200);
             return;
           }
         }
       } catch (_) {}
-      try { urlInput.focus({ preventScroll: true }); } catch (_) { urlInput.focus(); }
-      try { urlInput.select(); } catch (_) {}
-      showStatus('info', 'Tap the field and paste your link');
+      showStatus('info', 'Tap the link field, then paste');
     });
 
     downloadBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
+      if (busy) resetUiForNewJob();
       const raw = urlInput.value.trim();
       if (!raw) {
         showStatus('error', 'Please paste an Instagram video or Reel URL.');
-        try { urlInput.focus({ preventScroll: true }); } catch (_) { urlInput.focus(); }
         return;
       }
       const url = normalizeUrl(raw);
       if (!isValid(url)) {
         showStatus('error', 'Invalid Instagram URL. Use a public post or Reel link.');
-        try { urlInput.focus({ preventScroll: true }); } catch (_) { urlInput.focus(); }
         return;
       }
       processDownload(url);
     });
 
-    urlInput.addEventListener('keydown', e => { if (e.key === 'Enter') downloadBtn.click(); });
-    urlInput.addEventListener('input', () => showStatus('', ''));
+    urlInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        downloadBtn.click();
+      }
+    });
+    urlInput.addEventListener('input', function () { showStatus('', ''); });
   })();
   </script>
 </body>
